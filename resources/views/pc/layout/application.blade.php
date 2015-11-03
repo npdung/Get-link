@@ -35,6 +35,8 @@
             }
         }
     </script>
+	
+	@include('global.analyticstracking')
 
     </head>
 <body onload="if(document.getElementById('md5input')) document.getElementById('md5input').focus();">
