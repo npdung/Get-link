@@ -57,5 +57,3 @@ $array = $xpath->query("//*[@id='ProfileForm_name']");
 foreach($array as $v){
   $test = $v->getAttribute('value');
 }
-
-echo $test;
