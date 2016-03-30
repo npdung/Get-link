@@ -107,6 +107,8 @@ class Curl
         $this->setOpt(CURLINFO_HEADER_OUT, true);
         $this->setOpt(CURLOPT_HEADERFUNCTION, array($this, 'headerCallback'));
         $this->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $this->setOpt(CURLOPT_SSL_VERIFYHOST, 0);
+        $this->setOpt(CURLOPT_SSL_VERIFYPEER, 0);
         $this->headers = new CaseInsensitiveArray();
         $this->setURL($base_url);
     }
