@@ -6,9 +6,11 @@
     <div class="entry" style="text-align:center">
       Copy url cần tải vào đây | Mật khẩu (nếu có): <br />
       <form method="post" style="text-align:center" action="{{ url('/get-link') }}">
-        <input type="text" size="80" name="url" id="url" placeholder="http://www.fshare.vn/file/WOH1FSFHWT2M | 123456" />
-        <div class="g-recaptcha" data-sitekey="6LfXLBwTAAAAAM5r8n_imoGG7NprXUT4Y3Ri-Q45"></div>
-        <br />
+        <div style="margin-bottom: 15px">
+          <input type="text" size="80" name="url" id="url" placeholder="http://www.fshare.vn/file/WOH1FSFHWT2M | 123456" />
+        </div>
+        <div class="g-recaptcha" data-sitekey="6LfXLBwTAAAAAM5r8n_imoGG7NprXUT4Y3Ri-Q45" data-theme="dark" align="center"></div>
+        <div id="html_element" align="center"></div>
         <input type="submit" value="Get link" />
         {{ csrf_field() }}
       </form>

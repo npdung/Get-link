@@ -6,10 +6,11 @@
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link href="http://fonts.googleapis.com/css?family=Abel" rel="stylesheet" type="text/css" />
     <link href="{{ URL::asset('public/css/pc/style.css') }}" rel="stylesheet" type="text/css" media="screen" />
-	<link href="{{ URL::asset('public/images/fb_image.jpg') }}" rel="image_src"/>
+    <link href="{{ URL::asset('public/images/fb_image.jpg') }}" rel="image_src"/>
 
     <meta property="og:image" content="{{ URL::asset('public/images/fb_image.jpg') }}" />
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+    <script src="https://www.google.com/recaptcha/api.js?hl=vi" async defer></script>
 
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -45,7 +46,7 @@
     <div id="wrapper">
         <div id="header">
             <div id="logo">
-                <h1><a href="#"">Download VIP</a></h1>
+                <h1><a href="#">Download VIP</a></h1>
             </div>
         </div>
         <!-- end #header -->

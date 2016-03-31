@@ -8,85 +8,97 @@ use Input;
 class GetlinkController extends Controller
 {
   public function get_link(){
-    libxml_use_internal_errors(true);
-    require_once(app_path('Libraries/Curl.php'));
+    $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LfXLBwTAAAAAKog-gWVMOmDJKhHGEMCELdR-Ukn&response=" . Input::get('g-recaptcha-response'));
+    $obj = json_decode($response);
 
-    $url = Input::get('url');
+    if ($obj->success == false) {
 
-    $url = str_replace("http://", "https://", $url);
-    // step 1
-    $curl = new \Curl();
-    $curl->get('https://www.fshare.vn');
+      echo 'Captcha error';
+      exit;
 
-    $session_id = $curl->getCookie('session_id');
+    } else {
 
-    $doc = new \DOMDocument();
-    $doc->loadHTML($curl->response);
+      libxml_use_internal_errors(true);
+      require_once(app_path('Libraries/Curl.php'));
 
-    $xpath = new \DOMXpath($doc);
-    $array = $xpath->query("//*[@id='login-form']//*[@name='fs_csrf']");
+      $url = Input::get('url');
 
-    foreach ($array as $value) {
-      $fs_csrf = $value->getAttribute('value');
-    }
+      $url = str_replace("http://", "https://", $url);
+      // step 1
+      $curl = new \Curl();
+      $curl->get('https://www.fshare.vn');
 
-    echo "step 1: Done \n";
+      $session_id = $curl->getCookie('session_id');
 
-    // step 2
-    $curl->setCookie('session_id', $session_id);
+      $doc = new \DOMDocument();
+      $doc->loadHTML($curl->response);
 
-    $curl->post('https://www.fshare.vn/login', array(
-      "fs_csrf" => $fs_csrf,
-      "LoginForm[email]" => "phandung1111059@gmail.com",
-      "LoginForm[password]" => "7508286",
-      "LoginForm[rememberMe]" => "0",
-      "yt0" => "Đăng nhập"
-    ));
+      $xpath = new \DOMXpath($doc);
+      $array = $xpath->query("//*[@id='login-form']//*[@name='fs_csrf']");
 
-    $session_id = $curl->getCookie('session_id');
+      foreach ($array as $value) {
+        $fs_csrf = $value->getAttribute('value');
+      }
 
-    echo "step 2: Done \n";
+      echo "step 1: Done \n";
 
-    $curl->setCookie('session_id', $session_id);
+      // step 2
+      $curl->setCookie('session_id', $session_id);
 
-    $curl->post('https://www.fshare.vn/login', array(
-      "fs_csrf" => $fs_csrf,
-      "LoginForm[email]" => "phandung1111059@gmail.com",
-      "LoginForm[password]" => "7508286",
-      "LoginForm[rememberMe]" => "0",
-      "yt0" => "Đăng nhập"
-    ));
+      $curl->post('https://www.fshare.vn/login', array(
+        "fs_csrf" => $fs_csrf,
+        "LoginForm[email]" => "phandung1111059@gmail.com",
+        "LoginForm[password]" => "7508286",
+        "LoginForm[rememberMe]" => "0",
+        "yt0" => "Đăng nhập"
+      ));
 
-    // step 3
-    $curl->get($url);
+      $session_id = $curl->getCookie('session_id');
 
-    $doc = new \DOMDocument();
-    $doc->loadHTML($curl->response);
+      echo "step 2: Done \n";
 
-    $xpath = new \DOMXpath($doc);
-    $array = $xpath->query("//*[@id='download-form']/div[1]/input");
+      $curl->setCookie('session_id', $session_id);
 
-    foreach ($array as $value) {
-      $fs_csrf = $value->getAttribute('value');
-    }
-    echo "step 3: Done \n";
+      $curl->post('https://www.fshare.vn/login', array(
+        "fs_csrf" => $fs_csrf,
+        "LoginForm[email]" => "phandung1111059@gmail.com",
+        "LoginForm[password]" => "7508286",
+        "LoginForm[rememberMe]" => "0",
+        "yt0" => "Đăng nhập"
+      ));
 
-    // step 4
+      // step 3
+      $curl->get($url);
 
-    $split_url = explode('/', $url);
+      $doc = new \DOMDocument();
+      $doc->loadHTML($curl->response);
 
-    $curl->post('https://www.fshare.vn/download/get', array(
-      "fs_csrf" => $fs_csrf,
-      "DownloadForm[pwd]" => "",
-      "DownloadForm[linkcode]" => end($split_url),
-      "ajax" => "download-form",
-      "undefined" => "undefined"
-    ));
+      $xpath = new \DOMXpath($doc);
+      $array = $xpath->query("//*[@id='download-form']/div[1]/input");
 
-    echo "step 4: Done \n\n";
+      foreach ($array as $value) {
+        $fs_csrf = $value->getAttribute('value');
+      }
+      echo "step 3: Done \n";
 
-    echo "URL: ". @$curl->response->url;
+      // step 4
 
-    return redirect()->away($curl->response->url);
+      $split_url = explode('/', $url);
+
+      $curl->post('https://www.fshare.vn/download/get', array(
+        "fs_csrf" => $fs_csrf,
+        "DownloadForm[pwd]" => "",
+        "DownloadForm[linkcode]" => end($split_url),
+        "ajax" => "download-form",
+        "undefined" => "undefined"
+      ));
+
+      echo "step 4: Done \n\n";
+
+      echo "URL: ". @$curl->response->url;
+
+      return redirect()->away($curl->response->url);
+    } // END IF CHECK RECAPTCHA
+
   }
 }
