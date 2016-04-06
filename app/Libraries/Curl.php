@@ -769,6 +769,20 @@ class Curl
         return curl_setopt($this->curl, $option, $value);
     }
 
+    public function setProxy($proxy, $auth = null)
+    {
+        if (isset($proxy)) {
+            curl_setopt($this->curl, CURLOPT_PROXY, $proxy);
+            curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($this->curl, CURLOPT_HEADER, 1);
+        }
+
+        if (isset($proxyauth))
+            $curl->setOpt(CURLOPT_PROXYUSERPWD, $proxyauth);
+
+        return true;
+    }
+
     /**
      * Set Referer
      *

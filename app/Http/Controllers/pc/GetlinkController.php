@@ -8,6 +8,7 @@ use Input;
 class GetlinkController extends Controller
 {
   public function get_link(){
+    // Check Captcha
     $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LfXLBwTAAAAAKog-gWVMOmDJKhHGEMCELdR-Ukn&response=" . Input::get('g-recaptcha-response'));
     $obj = json_decode($response);
 
@@ -23,10 +24,21 @@ class GetlinkController extends Controller
 
       $url = Input::get('url');
 
+      // $proxy = '54.173.182.242:3128';
+      // $proxyauth = 'user:password';
+
       $url = str_replace("http://", "https://", $url);
-      // step 1
+
+      // step 1: Login
       $curl = new \Curl();
-      $curl->get('https://www.fshare.vn');
+
+      // $curl->setProxy($proxy);
+
+      // $curl->get('https://www.fshare.vn');
+      $curl->get('http://muanhagiatot.com.vn');
+
+      var_dump($curl->response);
+      exit;
 
       $session_id = $curl->getCookie('session_id');
 
@@ -40,9 +52,6 @@ class GetlinkController extends Controller
         $fs_csrf = $value->getAttribute('value');
       }
 
-      echo "step 1: Done \n";
-
-      // step 2
       $curl->setCookie('session_id', $session_id);
 
       $curl->post('https://www.fshare.vn/login', array(
@@ -55,8 +64,6 @@ class GetlinkController extends Controller
 
       $session_id = $curl->getCookie('session_id');
 
-      echo "step 2: Done \n";
-
       $curl->setCookie('session_id', $session_id);
 
       $curl->post('https://www.fshare.vn/login', array(
@@ -67,7 +74,9 @@ class GetlinkController extends Controller
         "yt0" => "Đăng nhập"
       ));
 
-      // step 3
+      echo "Step 1: Login - Done !!! <br>";
+
+      // step 2: Get link download
       $curl->get($url);
 
       $doc = new \DOMDocument();
@@ -79,9 +88,6 @@ class GetlinkController extends Controller
       foreach ($array as $value) {
         $fs_csrf = $value->getAttribute('value');
       }
-      echo "step 3: Done \n";
-
-      // step 4
 
       $split_url = explode('/', $url);
 
@@ -93,7 +99,7 @@ class GetlinkController extends Controller
         "undefined" => "undefined"
       ));
 
-      echo "step 4: Done \n\n";
+      echo "Step 2: Get Link Download - Done !!! <br><br>";
 
       echo "URL: ". @$curl->response->url;
 

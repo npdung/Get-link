@@ -12,10 +12,19 @@
 
     <script src="https://www.google.com/recaptcha/api.js?hl=vi" async defer></script>
 
+    <?php
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip=$_SERVER['HTTP_CLIENT_IP'];}
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];} else {
+        $ip=$_SERVER['REMOTE_ADDR'];}
+    ?>
+
     <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-33990741-2']);
         _gaq.push(['_trackPageview']);
+        _gaq.push(['_setCustomVar', 1, 'IP', '<?=$ip;?>', 1]);
 
         (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -38,10 +47,10 @@
         }
     </script>
 
-	@include('global.analyticstracking')
+    @include('global.analyticstracking')
 
     </head>
-<body onload="if(document.getElementById('md5input')) document.getElementById('md5input').focus();">
+<body>
     <div id="fb-root"></div>
     <div id="wrapper">
         <div id="header">
