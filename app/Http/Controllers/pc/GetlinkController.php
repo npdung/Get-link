@@ -7,6 +7,26 @@ use Input;
 
 class GetlinkController extends Controller
 {
+  public function test(){
+    libxml_use_internal_errors(true);
+    require_once(app_path('Libraries/Curl.php'));
+
+    $proxy = '120.198.233.211:80';
+    // $proxyauth = 'user:pass';
+
+    $curl = new \Curl();
+
+    // $curl->setProxy($proxy);
+    // $curl->setProxy($proxy, $proxyauth);
+
+    $curl->get('https://www.fshare.vn');
+    // $curl->get('http://www.citydo.com/prf/saitama/guide/sg/wg_list.html?c=0410006&p=667');
+
+    var_dump($curl->response);
+    exit;
+  }
+
+  //------------------------------------------------------------------------------------------------------
   public function get_link(){
     // Check Captcha
     $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LfXLBwTAAAAAKog-gWVMOmDJKhHGEMCELdR-Ukn&response=" . Input::get('g-recaptcha-response'));
@@ -24,21 +44,12 @@ class GetlinkController extends Controller
 
       $url = Input::get('url');
 
-      // $proxy = '54.173.182.242:3128';
-      // $proxyauth = 'user:password';
-
       $url = str_replace("http://", "https://", $url);
 
       // step 1: Login
       $curl = new \Curl();
 
-      // $curl->setProxy($proxy);
-
-      // $curl->get('https://www.fshare.vn');
-      $curl->get('http://muanhagiatot.com.vn');
-
-      var_dump($curl->response);
-      exit;
+      $curl->get('https://www.fshare.vn');
 
       $session_id = $curl->getCookie('session_id');
 

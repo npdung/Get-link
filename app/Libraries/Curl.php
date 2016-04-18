@@ -777,8 +777,8 @@ class Curl
             curl_setopt($this->curl, CURLOPT_HEADER, 1);
         }
 
-        if (isset($proxyauth))
-            $curl->setOpt(CURLOPT_PROXYUSERPWD, $proxyauth);
+        if (isset($auth))
+            curl_setopt($this->curl, CURLOPT_PROXYUSERPWD, $auth);
 
         return true;
     }

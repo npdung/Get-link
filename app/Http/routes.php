@@ -15,4 +15,5 @@ Route::group(['namespace' => 'pc'], function()
 {
   Route::get('/', 'HomeController@index');
   Route::post('/get-link', 'GetlinkController@get_link');
+  Route::get('/test', 'GetlinkController@test');
 });
